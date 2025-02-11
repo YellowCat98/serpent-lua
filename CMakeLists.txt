@@ -52,6 +52,12 @@ endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
+CPMAddPackage(
+    NAME sol2
+    GITHUB_REPOSITORY ThePhD/sol2
+    VERSION 3.3.0
+)
+
 file(GLOB_RECURSE SOURCES 
     src/*.cpp
 )
@@ -63,6 +69,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/lua
+    ${sol2_SOURCE_DIR}/include
 )
 add_dependencies(${PROJECT_NAME} lua)
 
