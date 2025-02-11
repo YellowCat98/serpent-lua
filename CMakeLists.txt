@@ -1,32 +1,69 @@
+# this cmakelists is based on https://git.norax.us.kg/Norax/apodora/src/branch/master/CMakeLists.txt
 cmake_minimum_required(VERSION 3.21)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-
 project(Serpent VERSION 1.0.0)
 
-add_library(${PROJECT_NAME} SHARED
-    src/main.cpp
-    # Add any extra C++ source files here
+add_library(lua STATIC 
+    lua/lapi.c
+    lua/lauxlib.c
+    lua/lbaselib.c
+    lua/lcode.c
+    lua/ldblib.c
+    lua/ldebug.c
+    lua/ldo.c
+    lua/ldump.c
+    lua/lfunc.c
+    lua/lgc.c
+    lua/linit.c
+    lua/liolib.c
+    lua/llex.c
+    lua/lmathlib.c
+    lua/lmem.c
+    lua/loadlib.c
+    lua/lobject.c
+    lua/lopcodes.c
+    lua/loslib.c
+    lua/lparser.c
+    lua/lstate.c
+    lua/lstring.c
+    lua/lstrlib.c
+    lua/ltable.c
+    lua/ltablib.c
+    lua/ltm.c
+    lua/lundump.c
+    lua/lvm.c
+    lua/lzio.c
+    lua/lutf8lib.c  
+    lua/lctype.c  
+    lua/lcorolib.c 
 )
 
-file(GLOB LUA_SOURCES
-    lua/*.c
+target_include_directories(lua PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/lua
 )
 
-add_library(lua STATIC ${LUA_SOURCES})
-
-target_include_directories(lua PUBLIC lua)
-
-target_include_directories(${PROJECT_NAME} PUBLIC lua)
-
-if (NOT DEFINED ENV{GEODE_SDK})
-    message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
-else()
-    message(STATUS "Found Geode: $ENV{GEODE_SDK}")
+if(MSVC)
+    target_link_options(lua PRIVATE "/WHOLEARCHIVE:lua")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    target_link_options(lua PRIVATE "-Wl,--whole-archive" "-Wl,--no-whole-archive")
 endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
+
+file(GLOB_RECURSE SOURCES 
+    src/*.cpp
+)
+add_library(${PROJECT_NAME} SHARED ${SOURCES})
+
+target_link_libraries(${PROJECT_NAME}
+    lua
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/lua
+)
+add_dependencies(${PROJECT_NAME} lua)
 
 setup_geode_mod(${PROJECT_NAME})
