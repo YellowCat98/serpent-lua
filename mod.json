@@ -10,5 +10,6 @@
 	"name": "SerpentLua",
 	"version": "v1.0.0",
 	"developer": "YellowCat98",
-	"description": ""
+	"description": "",
+	"early-load": true
 }

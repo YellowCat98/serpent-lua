@@ -6,6 +6,9 @@ extern "C" {
 }
 #include <sol/sol.hpp>
 #include <Geode/modify/MenuLayer.hpp>
+#include <SerpentLua.hpp>
+
+sol::state SerpentLua::lua = {};
 
 using namespace geode::prelude;
 
@@ -18,22 +21,46 @@ void createLib(sol::state& lua) {
 	});
 }
 
+$execute {
+	log::info("SerpentLua Loaded!");
+	SerpentLua::lua.open_libraries(sol::lib::base);
+	SerpentLua::bindings::cocos::bind(SerpentLua::lua);
+	SerpentLua::bindings::_geode::enums(SerpentLua::lua);
+	SerpentLua::bindings::_geode::bind(SerpentLua::lua);
+}
 
 class $modify(MyMenuLayer, MenuLayer) {
-struct Fields {
-	sol::state lua;
-};
+	/*
 	bool init() {
 		if (!MenuLayer::init()) return false;
-		m_fields->lua.open_libraries(sol::lib::base);
+		SerpentLua::lua.script(R"(
+local node = CCNode.create()
 
-		createLib(m_fields->lua);
+node:setID("lua-node-awesome")
 
+CCScene.get():addChild(node)
+			)");
 		return true;
 	}
+		*/
 	void onMoreGames(CCObject*) {
-		m_fields->lua.script(R"(
-createPopup("hello", "lib", "ok")
+		SerpentLua::lua.script(R"(
+local n = Notification.show("HELLOOOOOOOOOOOOOOO")
+
+n:show()
+
+createQuickPopup(
+	"TITLE",
+	"DESCRIPTION",
+	"HIII", "Hooo!",
+	function(layer, pressed)
+		if pressed then
+			print("PRESSED HIII")
+		else
+			print("PRESSED Hooo!")
+		end
+	end
+)
 		)");
 	}
 };
