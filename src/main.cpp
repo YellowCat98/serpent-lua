@@ -12,15 +12,6 @@ sol::state SerpentLua::lua = {};
 
 using namespace geode::prelude;
 
-void createLib(sol::state& lua) {
-	lua.set_function("createPopup", [](const std::string& name, const std::string& desc, const std::string& btn) {
-		log::info("{}", name);
-		log::info("{}", desc);
-		log::info("{}", btn);
-		FLAlertLayer::create(name.c_str(), desc, btn.c_str())->show();
-	});
-}
-
 $execute {
 	log::info("SerpentLua Loaded!");
 	SerpentLua::lua.open_libraries(sol::lib::base);
