@@ -15,6 +15,8 @@ using namespace geode::prelude;
 $execute {
 	log::info("SerpentLua Loaded!");
 	SerpentLua::lua.open_libraries(sol::lib::base);
+	
+	SerpentLua::bindings::cocos::enums(SerpentLua::lua);
 	SerpentLua::bindings::cocos::bind(SerpentLua::lua);
 	SerpentLua::bindings::_geode::enums(SerpentLua::lua);
 	SerpentLua::bindings::_geode::bind(SerpentLua::lua);

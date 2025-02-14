@@ -215,3 +215,12 @@ void SerpentLua::bindings::cocos::bind(sol::state& lua) {
         "releaseGLTexture", &cocos2d::CCTexture2D::releaseGLTexture
     );
 }
+
+void SerpentLua::bindings::cocos::enums(sol::state& lua) {
+    lua.new_enum<CCObjectType>("CCObjectType", {
+        {"PlayLayer", CCObjectType::PlayLayer},
+        {"LevelEditorLayer", CCObjectType::LevelEditorLayer},
+        {"GameObject", CCObjectType::GameObject},
+        {"MenuLayer", CCObjectType::MenuLayer}
+    });
+}
