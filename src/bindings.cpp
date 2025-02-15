@@ -350,7 +350,6 @@ void SerpentLua::bindings::robtop::bind(sol::state& lua) {
         "m_playerUDID", &GameManager::m_playerUDID,
         "m_playerName", &GameManager::m_playerName,
         "m_commentsEnabled", &GameManager::m_commentsEnabled,
-        "m_playerUserID", &GameManager::m_playerUserID,
-        
+        "m_playerUserID", &GameManager::m_playerUserID
     );
 }
