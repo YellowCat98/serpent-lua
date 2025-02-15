@@ -15,5 +15,9 @@ namespace SerpentLua {
             static void bind(sol::state& lua);
             static void enums(sol::state& lua);
         };
+
+        struct robtop {
+            static void bind(sol::state& lua);
+        };
     }
 }
